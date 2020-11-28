@@ -1,0 +1,33 @@
+server:
+  port: ${port:9092}
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/springcloud
+    username: root
+    password: 123456
+  application:
+    name: user-services
+  cloud:
+    client:
+      #ipAddress: 192.168.1.2
+      ipAddress: localhost
+mybatis:
+  type-aliases-package: com.spdb.pojo
+eureka:
+  client:
+    service-url:
+      #可以指定多个注册中心的地址，用逗号分隔
+      defaultZone: http://127.0.0.1:10003/eureka
+  instance:
+    # 更倾向使用ip地址，而不是host名。不是eureka服务列表显示ip，而是restTemplate调用时候使用ip
+    prefer-ip-address: true
+    # ip地址
+    ip-address: 127.0.0.1
+    hostname: zzz
+    #实例名称
+    instance-id: ${spring.cloud.client.ipAddress}:${spring.application.name}:${server.port}:@project.version@
+    # 续约间隔，向注册中心发送心跳，默认30秒
+    lease-renewal-interval-in-seconds: 3
+    # 服务失效时间，默认90秒。注册中心在心跳间隔时间内没收到心跳，会再等90秒，还是没收到就会被注册中心定时扫描到，剔除服务
+    lease-expiration-duration-in-seconds: 6
